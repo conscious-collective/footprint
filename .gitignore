@@ -1,0 +1,10 @@
+# Rust
+parser/target/
+
+# Node
+site/node_modules/
+site/dist/
+site/.astro/
+
+# OS
+.DS_Store

@@ -1,0 +1,397 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+
+const basicExample = `<html>
+<head>
+  <!-- Footprint Protocol — Required -->
+  <meta property="fp:product"   content="Fairphone 5" />
+  <meta property="fp:co2e"      content="23.6" />
+  <meta property="fp:co2e:unit" content="kg" />
+</head>
+</html>`;
+
+const recommendedExample = `<!-- Recommended metadata -->
+<meta property="fp:scope"         content="lifecycle" />
+<meta property="fp:per"           content="unit" />
+<meta property="fp:methodology"   content="ISO 14067" />
+<meta property="fp:certifier"     content="https://certifier.example.org/cert/12345" />
+<meta property="fp:verified:date" content="2025-01-15" />`;
+
+const breakdownExample = `<!-- Optional lifecycle breakdown (GHG Protocol phases) -->
+<meta property="fp:materials"     content="8.2" />
+<meta property="fp:manufacturing" content="4.1" />
+<meta property="fp:transport"     content="2.8" />
+<meta property="fp:use"           content="6.9" />
+<meta property="fp:disposal"      content="1.6" />`;
+
+const fullExample = `<html>
+<head>
+  <title>Fairphone 5 — Sustainable Smartphone</title>
+
+  <!-- Footprint Protocol v0.1 -->
+
+  <!-- Required -->
+  <meta property="fp:product"   content="Fairphone 5" />
+  <meta property="fp:co2e"      content="23.6" />
+  <meta property="fp:co2e:unit" content="kg" />
+
+  <!-- Recommended -->
+  <meta property="fp:scope"         content="lifecycle" />
+  <meta property="fp:per"           content="unit" />
+  <meta property="fp:methodology"   content="ISO 14067" />
+  <meta property="fp:certifier"     content="https://tco-certified.org/cert/fp5-2025" />
+  <meta property="fp:verified:date" content="2025-03-01" />
+
+  <!-- Lifecycle breakdown -->
+  <meta property="fp:materials"     content="8.2" />
+  <meta property="fp:manufacturing" content="4.1" />
+  <meta property="fp:transport"     content="2.8" />
+  <meta property="fp:use"           content="6.9" />
+  <meta property="fp:disposal"      content="1.6" />
+</head>
+<body>
+  <!-- product page content -->
+</body>
+</html>`;
+
+const rustExample = `use footprint_parser::parse;
+
+let html = r#"
+  <meta property="fp:product"   content="Fairphone 5" />
+  <meta property="fp:co2e"      content="23.6" />
+  <meta property="fp:co2e:unit" content="kg" />
+"#;
+
+let data = parse(html)?;
+println!("{} — {} {:?}", data.product, data.co2e, data.co2e_unit);
+// Fairphone 5 — 23.6 Kg`;
+---
+
+<BaseLayout>
+  <Nav />
+
+  <main>
+    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div class="scanline"></div>
+
+      <!-- Grid background -->
+      <div class="absolute inset-0 pointer-events-none" style="
+        background-image:
+          linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+      "></div>
+
+      <!-- Radial glow -->
+      <div class="absolute inset-0 pointer-events-none" style="
+        background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,229,255,0.04) 0%, transparent 70%);
+      "></div>
+
+      <div class="relative max-w-[1100px] mx-auto px-6 lg:px-10 text-center">
+        <div class="reveal">
+          <div class="tag mb-6">Open Standard · v0.1</div>
+          <h1 class="font-display font-bold text-[clamp(3rem,8vw,6.5rem)] leading-[0.92] tracking-tighter text-[#f0f0f0] mb-8">
+            Footprint<br />
+            <span class="text-accent neon-text">Protocol</span>
+          </h1>
+          <p class="text-[1.15rem] text-[#666] max-w-[560px] mx-auto leading-relaxed mb-12">
+            An open standard for embedding carbon footprint metadata in any webpage.<br />
+            Like <a href="https://ogp.me" target="_blank" rel="noopener" class="text-[#888] hover:text-accent transition-colors underline underline-offset-4">OpenGraph</a>, but for sustainability.
+          </p>
+          <div class="flex items-center justify-center gap-4 flex-wrap">
+            <a href="#spec"
+               class="cyber-btn-primary inline-flex items-center gap-2 px-6 py-3 bg-accent text-[#060608] font-display font-bold text-[13px] tracking-[0.08em] uppercase transition-opacity hover:opacity-90">
+              View Spec
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1v12M1 7l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </a>
+            <a href="https://github.com/conscious-collective/footprint"
+               target="_blank" rel="noopener"
+               class="cyber-btn-secondary inline-flex items-center gap-2 px-6 py-3 border border-[#2a2a32] text-[#888] hover:text-[#f0f0f0] hover:border-[#3a3a42] font-display text-[13px] tracking-[0.08em] uppercase transition-colors">
+              GitHub
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1C3.69 1 1 3.69 1 7c0 2.65 1.72 4.9 4.1 5.69.3.05.41-.13.41-.29v-1.02C3.73 11.73 3.37 10.6 3.37 10.6c-.27-.69-.67-.87-.67-.87-.55-.37.04-.36.04-.36.61.04.93.63.93.63.54.92 1.41.65 1.76.5.05-.39.21-.65.38-.8-1.33-.15-2.73-.67-2.73-2.97 0-.66.23-1.19.62-1.61-.06-.15-.27-.76.06-1.59 0 0 .51-.16 1.66.62A5.8 5.8 0 0 1 7 4.04c.51 0 1.03.07 1.51.2 1.15-.78 1.66-.62 1.66-.62.33.83.12 1.44.06 1.59.38.42.62.95.62 1.61 0 2.31-1.4 2.82-2.74 2.97.22.19.41.56.41 1.13v1.68c0 .16.11.34.42.28C11.29 11.9 13 9.65 13 7c0-3.31-2.69-6-6-6z" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Introduction ──────────────────────────────────────────────────── -->
+    <section id="intro" class="border-t border-[#1a1a22] py-24">
+      <div class="max-w-[1100px] mx-auto px-6 lg:px-10">
+        <div class="max-w-[720px] reveal">
+          <div class="section-rule"></div>
+          <div class="tag mb-4">Introduction</div>
+          <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,2.8rem)] tracking-tighter text-[#f0f0f0] mb-8">
+            What is the Footprint Protocol?
+          </h2>
+          <div class="space-y-5 text-[1rem] text-[#666] leading-relaxed">
+            <p>
+              The Footprint Protocol is an open metadata standard that lets any product webpage
+              declare its carbon footprint using HTML <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">&lt;meta&gt;</code> tags.
+              It works like the <a href="https://ogp.me" target="_blank" rel="noopener" class="text-[#888] hover:text-accent underline underline-offset-4 transition-colors">OpenGraph Protocol</a> —
+              add a few lines to your page's <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">&lt;head&gt;</code> and any tool,
+              scraper, or search engine can read your product's environmental data without any API contract.
+            </p>
+            <p>
+              The <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">fp:</code> namespace
+              covers the essentials — CO<sub>2</sub>e value, unit, scope, and lifecycle breakdown —
+              while staying minimal enough to embed in five lines. No special server, no registry,
+              no vendor lock-in. Just HTML.
+            </p>
+            <p>
+              Whether you're a manufacturer publishing an LCA, a retailer adding sustainability
+              data to product pages, or a browser extension surfacing carbon info to shoppers,
+              the Footprint Protocol gives you a single, unambiguous format to read and write.
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick stat cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-px mt-20 border border-[#1a1a22] bg-[#1a1a22]">
+          {[
+            { label: 'Properties', value: '11', note: '3 required · 5 recommended · 3 optional' },
+            { label: 'Namespace', value: 'fp:', note: 'Property prefix for all meta tags' },
+            { label: 'Standard', value: 'HTML', note: 'No framework, no runtime, no API' },
+          ].map((item) => (
+            <div class="bg-[#060608] px-8 py-10 reveal">
+              <div class="font-display font-bold text-[2.2rem] text-[#f0f0f0] stat-neon mb-1">{item.value}</div>
+              <div class="font-display text-[11px] tracking-[0.15em] uppercase text-accent mb-2">{item.label}</div>
+              <div class="text-[12px] text-[#444]">{item.note}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Spec ───────────────────────────────────────────────────────────── -->
+    <section id="spec" class="border-t border-[#1a1a22] py-24">
+      <div class="max-w-[1100px] mx-auto px-6 lg:px-10">
+        <div class="reveal mb-16">
+          <div class="section-rule"></div>
+          <div class="tag mb-4">Protocol Specification</div>
+          <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,2.8rem)] tracking-tighter text-[#f0f0f0]">
+            Basic Metadata
+          </h2>
+          <p class="text-[#666] mt-4 max-w-[560px]">
+            Three properties are required. Every Footprint Protocol implementation must include all three.
+          </p>
+        </div>
+
+        <!-- Required properties table -->
+        <div class="border border-[#1a1a22] mb-10 reveal">
+          <div class="absolute top-0 left-0 right-0 h-px"
+               style="background: linear-gradient(90deg, rgba(0,229,255,0.15), transparent);"></div>
+          <div class="grid grid-cols-[1fr_80px_1fr] border-b border-[#1a1a22] px-6 py-3">
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Property</span>
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Type</span>
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Description</span>
+          </div>
+          {[
+            { prop: 'fp:product', type: 'string', desc: 'The name of the product whose footprint is described.' },
+            { prop: 'fp:co2e', type: 'float', desc: 'CO₂ equivalent value. Must be a valid decimal number.' },
+            { prop: 'fp:co2e:unit', type: 'enum', desc: 'Unit of the CO₂e value. One of: kg, g, t.' },
+          ].map((row, i) => (
+            <div class={`grid grid-cols-[1fr_80px_1fr] px-6 py-4 ${i < 2 ? 'border-b border-[#1a1a22]' : ''}`}>
+              <code class="text-accent text-[13px]">{row.prop}</code>
+              <span class="text-[12px] text-[#444] font-display">{row.type}</span>
+              <span class="text-[13px] text-[#666]">{row.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="reveal">
+          <CodeBlock code={basicExample} lang="html" />
+        </div>
+
+        <!-- Recommended -->
+        <div class="reveal mt-20 mb-16">
+          <h3 class="font-display font-bold text-[1.6rem] tracking-tight text-[#f0f0f0] mb-3">
+            Recommended Metadata
+          </h3>
+          <p class="text-[#666] max-w-[560px]">
+            These properties are optional but strongly encouraged. They provide the context
+            tools need to compare footprints fairly and trace claims back to their source.
+          </p>
+        </div>
+
+        <div class="border border-[#1a1a22] mb-10 reveal">
+          <div class="grid grid-cols-[1fr_80px_1fr] border-b border-[#1a1a22] px-6 py-3">
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Property</span>
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Type</span>
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Description</span>
+          </div>
+          {[
+            { prop: 'fp:scope', type: 'enum', desc: 'Lifecycle scope. One of: lifecycle, production, use, disposal.' },
+            { prop: 'fp:per', type: 'string', desc: 'Functional unit. e.g. unit, year, km, kWh.' },
+            { prop: 'fp:methodology', type: 'string', desc: 'Standard used. e.g. ISO 14067, GHG Protocol.' },
+            { prop: 'fp:certifier', type: 'url', desc: 'URL of the certifying or auditing body.' },
+            { prop: 'fp:verified:date', type: 'date', desc: 'ISO 8601 date of the last verification.' },
+          ].map((row, i) => (
+            <div class={`grid grid-cols-[1fr_80px_1fr] px-6 py-4 ${i < 4 ? 'border-b border-[#1a1a22]' : ''}`}>
+              <code class="text-accent/80 text-[13px]">{row.prop}</code>
+              <span class="text-[12px] text-[#444] font-display">{row.type}</span>
+              <span class="text-[13px] text-[#666]">{row.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="reveal">
+          <CodeBlock code={recommendedExample} lang="html" />
+        </div>
+
+        <!-- Lifecycle breakdown -->
+        <div class="reveal mt-20 mb-16">
+          <h3 class="font-display font-bold text-[1.6rem] tracking-tight text-[#f0f0f0] mb-3">
+            Lifecycle Breakdown
+          </h3>
+          <p class="text-[#666] max-w-[560px]">
+            When you have granular lifecycle assessment data, publish the individual phase
+            contributions. All values are in the same unit as <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">fp:co2e:unit</code>.
+          </p>
+        </div>
+
+        <div class="border border-[#1a1a22] mb-10 reveal">
+          <div class="grid grid-cols-[1fr_80px_1fr] border-b border-[#1a1a22] px-6 py-3">
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Property</span>
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Type</span>
+            <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">Description</span>
+          </div>
+          {[
+            { prop: 'fp:materials', type: 'float', desc: 'Raw material extraction and processing.' },
+            { prop: 'fp:manufacturing', type: 'float', desc: 'Manufacturing and assembly.' },
+            { prop: 'fp:transport', type: 'float', desc: 'Transport and distribution.' },
+            { prop: 'fp:use', type: 'float', desc: 'Use phase (energy consumption, consumables).' },
+            { prop: 'fp:disposal', type: 'float', desc: 'End-of-life treatment and disposal.' },
+          ].map((row, i) => (
+            <div class={`grid grid-cols-[1fr_80px_1fr] px-6 py-4 ${i < 4 ? 'border-b border-[#1a1a22]' : ''}`}>
+              <code class="text-[#888] text-[13px]">{row.prop}</code>
+              <span class="text-[12px] text-[#444] font-display">{row.type}</span>
+              <span class="text-[13px] text-[#666]">{row.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="reveal">
+          <CodeBlock code={breakdownExample} lang="html" />
+        </div>
+
+        <!-- Full example -->
+        <div class="reveal mt-20 mb-10">
+          <h3 class="font-display font-bold text-[1.6rem] tracking-tight text-[#f0f0f0] mb-3">
+            Complete Example
+          </h3>
+          <p class="text-[#666] max-w-[560px]">
+            A full-page implementation with all recommended and optional properties.
+            Based on the Fairphone 5 lifecycle assessment.
+          </p>
+        </div>
+
+        <div class="reveal">
+          <CodeBlock code={fullExample} lang="html" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Implementations ───────────────────────────────────────────────── -->
+    <section id="implementations" class="border-t border-[#1a1a22] py-24">
+      <div class="max-w-[1100px] mx-auto px-6 lg:px-10">
+        <div class="reveal mb-16">
+          <div class="section-rule"></div>
+          <div class="tag mb-4">Implementations</div>
+          <h2 class="font-display font-bold text-[clamp(1.8rem,4vw,2.8rem)] tracking-tighter text-[#f0f0f0]">
+            Parse it in your language
+          </h2>
+          <p class="text-[#666] mt-4 max-w-[560px]">
+            Official and community parsers for reading <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">fp:</code> metadata from HTML.
+          </p>
+        </div>
+
+        <!-- Rust parser card -->
+        <div class="border border-[#1a1a22] neon-border-hover reveal cyber-card overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-px"
+               style="background: linear-gradient(90deg, rgba(0,229,255,0.2), transparent);"></div>
+          <div class="p-8 md:p-10">
+            <div class="flex items-start justify-between gap-6 flex-wrap">
+              <div>
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="tag">Official</span>
+                  <span class="text-[10px] font-display tracking-[0.15em] uppercase text-[#333]">Rust</span>
+                </div>
+                <h3 class="font-display font-bold text-[1.5rem] tracking-tight text-[#f0f0f0] mb-2">
+                  footprint-parser
+                </h3>
+                <p class="text-[#666] text-[0.95rem] max-w-[500px] leading-relaxed">
+                  Parse Footprint Protocol meta tags from any HTML string. Returns a typed
+                  <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">FootprintData</code> struct
+                  with validation. Available as a library and a CLI tool.
+                </p>
+              </div>
+              <div class="flex flex-col gap-3 shrink-0">
+                <a href="https://github.com/conscious-collective/footprint/tree/main/parser"
+                   target="_blank" rel="noopener"
+                   class="cyber-btn-secondary inline-flex items-center gap-2 px-5 py-2.5 border border-[#2a2a32] text-[#888] hover:text-[#f0f0f0] hover:border-[#3a3a42] font-display text-[12px] tracking-[0.08em] uppercase transition-colors">
+                  View on GitHub
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="mt-8 border-t border-[#1a1a22] pt-8">
+              <div class="text-[11px] font-display tracking-[0.15em] uppercase text-[#333] mb-4">Quick start</div>
+              <CodeBlock code={rustExample} lang="rust" />
+            </div>
+
+            <div class="mt-6 flex items-center gap-6 flex-wrap">
+              <div class="text-[12px] text-[#444]">
+                <span class="text-[#333]">Install:</span>
+                <code class="ml-2 text-[#888] bg-[#0d0d10] px-2 py-1 border border-[#1a1a22] text-[11px]">cargo add footprint-parser</code>
+              </div>
+              <div class="text-[12px] text-[#444]">
+                <span class="text-[#333]">CLI:</span>
+                <code class="ml-2 text-[#888] bg-[#0d0d10] px-2 py-1 border border-[#1a1a22] text-[11px]">footprint product.html</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add your implementation CTA -->
+        <div class="mt-8 border border-dashed border-[#1a1a22] p-8 text-center reveal">
+          <p class="text-[#444] text-[0.9rem] mb-3">Built a parser in another language?</p>
+          <a href="https://github.com/conscious-collective/footprint/issues"
+             target="_blank" rel="noopener"
+             class="text-[12px] text-accent/70 hover:text-accent transition-colors tracking-[0.1em] uppercase font-display underline underline-offset-4">
+            Open a GitHub issue to get listed here
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+</script>

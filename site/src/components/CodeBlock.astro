@@ -1,0 +1,16 @@
+---
+interface Props {
+  code: string;
+  lang?: string;
+}
+const { code, lang = 'html' } = Astro.props;
+---
+
+<div class="relative border border-[#1a1a22] bg-[#080808] overflow-x-auto">
+  <div class="absolute top-0 left-0 right-0 h-px"
+       style="background: linear-gradient(90deg, rgba(0,229,255,0.15), transparent);"></div>
+  {lang && (
+    <div class="px-5 pt-4 pb-0 text-[10px] font-display tracking-[0.2em] uppercase text-[#333]">{lang}</div>
+  )}
+  <pre class="p-5 text-[13px] text-[#888] leading-relaxed overflow-x-auto font-mono whitespace-pre">{code}</pre>
+</div>

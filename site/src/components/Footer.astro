@@ -1,0 +1,43 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[#1a1a22] relative overflow-hidden">
+  <div class="absolute top-0 left-0 right-0 h-px"
+       style="background: linear-gradient(90deg, transparent, rgba(0,229,255,0.1), transparent);"></div>
+
+  <div class="max-w-[1100px] mx-auto px-6 lg:px-10 py-10">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+
+      <a href="/" class="font-display font-bold text-[15px] text-[#f0f0f0] tracking-tight hover:text-accent transition-colors">
+        Footprint Protocol
+      </a>
+
+      <nav class="flex items-center gap-6 flex-wrap">
+        <a href="/#spec"
+           class="text-[11px] text-[#888] hover:text-[#f0f0f0] transition-colors tracking-[0.12em] uppercase font-display">Spec</a>
+        <a href="https://github.com/conscious-collective/footprint"
+           target="_blank" rel="noopener"
+           class="text-[11px] text-[#888] hover:text-[#f0f0f0] transition-colors tracking-[0.12em] uppercase font-display">GitHub</a>
+        <a href="https://c22.space"
+           target="_blank" rel="noopener"
+           class="text-[11px] text-accent hover:text-white transition-colors tracking-[0.12em] uppercase font-display"
+           style="text-shadow: 0 0 8px rgba(0,229,255,0.3);">Hire a tech agency</a>
+        <a href="https://c22.foundation"
+           target="_blank" rel="noopener"
+           class="text-[11px] text-[#888] hover:text-[#f0f0f0] transition-colors tracking-[0.12em] uppercase font-display">Open Source Foundation</a>
+      </nav>
+
+      <div class="flex items-center gap-5"></div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-[#1a1a22]">
+      <p class="text-[10px] text-[#666] tracking-[0.15em] uppercase font-display">
+        © {year} Footprint Protocol · An open standard by
+        <a href="https://c22.foundation" target="_blank" rel="noopener"
+           class="text-accent/70 hover:text-accent transition-colors"
+           style="text-decoration: underline; text-underline-offset: 3px;">C22 Foundation</a>.
+      </p>
+    </div>
+  </div>
+</footer>

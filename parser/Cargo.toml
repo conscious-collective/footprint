@@ -1,0 +1,21 @@
+[package]
+name        = "footprint-parser"
+version     = "0.1.0"
+edition     = "2021"
+description = "Parser for Footprint Protocol carbon footprint meta tags"
+license     = "MIT"
+repository  = "https://github.com/conscious-collective/footprint"
+keywords    = ["carbon", "footprint", "sustainability", "parser", "html"]
+categories  = ["parser-implementations", "web-programming"]
+
+[[bin]]
+name = "footprint"
+path = "bin/footprint.rs"
+
+[lib]
+name = "footprint_parser"
+path = "src/lib.rs"
+
+[dependencies]
+scraper   = "0.20"
+thiserror = "1"
