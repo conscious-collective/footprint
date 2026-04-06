@@ -6,7 +6,7 @@ import CodeBlock from '../components/CodeBlock.astro';
 
 const basicExample = `<html>
 <head>
-  <!-- Footprint Protocol — Required -->
+  <!-- Footprint Protocol: Required -->
   <meta property="fp:product"   content="Fairphone 5" />
   <meta property="fp:co2e"      content="23.6" />
   <meta property="fp:co2e:unit" content="kg" />
@@ -29,7 +29,7 @@ const breakdownExample = `<!-- Optional lifecycle breakdown (GHG Protocol phases
 
 const fullExample = `<html>
 <head>
-  <title>Fairphone 5 — Sustainable Smartphone</title>
+  <title>Fairphone 5: Sustainable Smartphone</title>
 
   <!-- Footprint Protocol v0.1 -->
 
@@ -66,8 +66,8 @@ let html = r#"
 "#;
 
 let data = parse(html)?;
-println!("{} — {} {:?}", data.product, data.co2e, data.co2e_unit);
-// Fairphone 5 — 23.6 Kg`;
+println!("{}: {} {:?}", data.product, data.co2e, data.co2e_unit);
+// Fairphone 5: 23.6 Kg`;
 ---
 
 <BaseLayout>
@@ -136,13 +136,13 @@ println!("{} — {} {:?}", data.product, data.co2e, data.co2e_unit);
             <p>
               The Footprint Protocol is an open metadata standard that lets any product webpage
               declare its carbon footprint using HTML <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">&lt;meta&gt;</code> tags.
-              It works like the <a href="https://ogp.me" target="_blank" rel="noopener" class="text-[#888] hover:text-accent underline underline-offset-4 transition-colors">OpenGraph Protocol</a> —
+              It works like the <a href="https://ogp.me" target="_blank" rel="noopener" class="text-[#888] hover:text-accent underline underline-offset-4 transition-colors">OpenGraph Protocol</a>:
               add a few lines to your page's <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">&lt;head&gt;</code> and any tool,
               scraper, or search engine can read your product's environmental data without any API contract.
             </p>
             <p>
               The <code class="text-[#888] bg-[#0d0d10] px-1.5 py-0.5 text-[0.85em] border border-[#1a1a22]">fp:</code> namespace
-              covers the essentials — CO<sub>2</sub>e value, unit, scope, and lifecycle breakdown —
+              covers the essentials (CO<sub>2</sub>e value, unit, scope, and lifecycle breakdown)
               while staying minimal enough to embed in five lines. No special server, no registry,
               no vendor lock-in. Just HTML.
             </p>
